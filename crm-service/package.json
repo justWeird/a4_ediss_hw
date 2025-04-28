@@ -1,0 +1,20 @@
+{
+  "name": "crm-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/crm-service.js",
+    "dev": "npx nodemon src/crm-service.js"
+  },
+  "keywords": [],
+  "author": "Joseph Fadiji",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "kafkajs": "^2.2.4",
+    "nodemailer": "^6.10.1",
+    "nodemon": "^3.1.9"
+  }
+}

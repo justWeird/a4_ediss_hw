@@ -1,0 +1,34 @@
+//import needed libraries
+const express = require('express');
+const cors = require('cors');
+const bookRoutes = require('./routes/books');
+const customerRoutes = require('./routes/customers');
+const {validateJWT} = require('./middleware/jwtMiddleware');
+const clientTypeMiddleware = require('./middleware/clientTypeMiddleware');
+require('dotenv').config();
+
+//initialize the server to use express
+const app = express();
+
+//set the port. It is exposed on docker as well
+const PORT = parseInt(process.env.PORT, 10) || 80;
+
+app.use(cors());
+app.use(express.json());
+
+// Status endpoint
+app.get('/status', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
+// Middleware for all routes
+app.use(clientTypeMiddleware);
+app.use(validateJWT);
+
+// Routes
+app.use('/books', bookRoutes);
+app.use('/customers', customerRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Web BFF service running on port ${PORT}`);
+});

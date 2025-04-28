@@ -1,0 +1,326 @@
+### Test status endpoint
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/status
+
+###local testing
+GET http://localhost:3001/status
+
+### Add a book (success case)
+GET http://localhost:3000/status
+Content-Type: application/json
+
+### Try to add the same book again (should return 422 - ISBN already exists)
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books
+Content-Type: application/json
+
+{
+  "ISBN": "978-0321815736",
+  "title": "Software Architecture in Practice",
+  "Author": "Bass, L.",
+  "description": "seminal book on software architecture",
+  "genre": "non-fiction",
+  "price": 59.95,
+  "quantity": 106
+}
+
+###local testing
+POST http://localhost:3000/books/
+Content-Type: application/json
+
+{
+  "ISBN": "978-0321815736",
+  "title": "Software Architecture in Practice",
+  "Author": "Bass, L.",
+  "description": "seminal book on software architecture",
+  "genre": "non-fiction",
+  "price": 59.95,
+  "quantity": 106
+}
+
+###local testing
+GET http://a0be0943484174fdb93b09842c5ff17a-1316846738.us-east-1.elb.amazonaws.com:80/books/978-0321815736/related-books
+Content-Type: application/json
+
+###local testing
+GET http://localhost:80/books/978-0321815736/related-books
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: android
+
+
+### local testing create - bff
+POST http://localhost:80/books/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: iOS
+
+{
+  "ISBN": "978-1449373320",
+  "title": "Designing Data-Intensive Applications",
+  "Author": "Kleppmann, M.",
+  "description": "The big ideas behind reliable, scalable, and maintainable systems",
+  "genre": "technology",
+  "price": 49.99,
+  "quantity": 75
+}
+
+### local testing update - bff
+PUT http://localhost:80/books/978-1449373320
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: Android
+
+{
+  "ISBN": "978-1449373320",
+  "title": "Designing Data-Intensive Applications",
+  "Author": "Kleppmann, M.",
+  "description": "The big ideas behind reliable, scalable, and maintainable systems",
+  "genre": "technology",
+  "price": 49.99,
+  "quantity": 88
+}
+
+###local testing get book - bff A3
+GET http://a870ce517683143d5820d1808211e4ea-574727052.us-east-1.elb.amazonaws.com:80/books/status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+X-Client-Type: web
+
+
+###local testing get book - bff A3
+GET http://a71107cd12e90427aaacb4f03ea99119-180323284.us-east-1.elb.amazonaws.com:80/books/status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+X-Client-Type: iOS
+
+###local testing get book - A3
+GET http://a51a72200498f4321aa657820b7c9870-284760629.us-east-1.elb.amazonaws.com:80/status
+Content-Type: application/json
+
+
+###local testing
+GET http://localhost:3000/books/978-0321815736
+
+
+###local testing
+GET http://localhost:3000/customers/1
+
+###local testing
+GET http://localhost:80/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+X-Client-Type: iOS
+
+### Add a different book
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books
+Content-Type: application/json
+
+{
+  "ISBN": "978-1449373320",
+  "title": "Designing Data-Intensive Applications",
+  "Author": "Kleppmann, M.",
+  "description": "The big ideas behind reliable, scalable, and maintainable systems",
+  "genre": "technology",
+  "price": 49.99,
+  "quantity": 75
+}
+
+### Get book by ISBN (direct path)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books/222-1114567890
+
+### Get book by ISBN (isbn prefix path)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books/isbn/978-1449373320
+
+### Get non-existent book (should return 404)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books/000-0000000000
+
+### Update a book
+PUT http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books/978-0321815736
+Content-Type: application/json
+
+{
+  "ISBN": "978-0321815736",
+  "title": "Software Architecture in Practice",
+  "Author": "Bass, L.",
+  "description": "seminal book on software architecture",
+  "genre": "non-fiction",
+  "price": 59.95,
+  "quantity": 99
+}
+
+### Update non-existent book (should return 404)
+PUT http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books/000-0000000000
+Content-Type: application/json
+
+{
+  "ISBN": "000-0000000000",
+  "title": "Non-existent Book",
+  "Author": "Unknown",
+  "description": "This book does not exist",
+  "genre": "fiction",
+  "price": 9.99,
+  "quantity": 0
+}
+
+### Add a customer
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+
+{
+  "userId": "starlord2002@gmail.com",
+  "name": "Star Lord",
+  "phone": "+14122144122",
+  "address": "48 Galaxy Rd",
+  "address2": "suite 4",
+  "city": "Fargo",
+  "state": "ND",
+  "zipcode": "58102"
+}
+
+### Add a customer - bff style
+POST http://a870ce517683143d5820d1808211e4ea-574727052.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: web
+
+{
+  "userId": "jfblaing997@gmail.com",
+  "name": "Star Lord",
+  "phone": "+14122144122",
+  "address": "48 Galaxy Rd",
+  "address2": "suite 4",
+  "city": "Fargo",
+  "state": "ND",
+  "zipcode": "58102"
+}
+
+### Add a customer - bff style
+GET http://a870ce517683143d5820d1808211e4ea-574727052.us-east-1.elb.amazonaws.com:80/customers/4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: web
+
+### Add a customer - bff style
+GET http://a71107cd12e90427aaacb4f03ea99119-180323284.us-east-1.elb.amazonaws.com:80/customers/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: ios
+
+
+
+### Try to add the same customer again (should return 422 - userId already exists)
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+
+{
+  "userId": "starlord2002@gmail.com",
+  "name": "Star Lord",
+  "phone": "+14122144122",
+  "address": "Updated Address",
+  "address2": "suite 4",
+  "city": "Fargo",
+  "state": "ND",
+  "zipcode": "58102"
+}
+
+### local dev
+POST http://localhost:3000/customers
+Content-Type: application/json
+
+{
+  "userId": "jfblaing997@gmail.com",
+  "name": "Star Lord",
+  "phone": "+14122144122",
+  "address": "Updated Address",
+  "address2": "suite 4",
+  "city": "Fargo",
+  "state": "ND",
+  "zipcode": "58102"
+}
+
+### Add a different customer
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+
+{
+  "userId": "ironman@stark.com",
+  "name": "Tony Stark",
+  "phone": "+12125551234",
+  "address": "Stark Tower",
+  "address2": "200 Park Avenue",
+  "city": "New York",
+  "state": "NY",
+  "zipcode": "10007"
+}
+
+### Add a customer - bff style
+POST http://localhost:80/customers
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: web
+
+{
+  "userId": "ironmmman@stark.com",
+  "name": "Tony Stark",
+  "phone": "+12125551234",
+  "address": "Stark Tower",
+  "state": "NY",
+  "zipcode": "10007"
+}
+
+### get a customer - bff style
+GET http://localhost:80/customers?userId=starlord2002@gmail.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: iOS
+
+### get a customer - bff style
+GET http://localhost:80/customers/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
+x-client-type: Android
+
+### Get customer by ID
+GET http://localhost:3000/customers?userId=starlord2002@gmail.com
+
+### Get customer by userId (Email)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers?userId=starlord2002@gmail.com
+
+### Get non-existent customer by ID (should return 404)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers/999
+
+### Get non-existent customer by userId (should return 404)
+GET http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers?userId=nonexistent@example.com
+
+### Test invalid input for book (missing required fields)
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books
+Content-Type: application/json
+
+{
+  "ISBN": "978-1234567890",
+  "title": "Incomplete Book"
+}
+
+### Test invalid input for customer (invalid email)
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+
+{
+  "userId": "not-an-email",
+  "name": "Invalid User",
+  "phone": "+12125551234",
+  "address": "123 Main St",
+  "city": "Anytown",
+  "state": "CA",
+  "zipcode": "90210"
+}
+
+### Test invalid input for customer (invalid state)
+POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/customers
+Content-Type: application/json
+
+{
+  "userId": "valid@example.com",
+  "name": "Invalid State",
+  "phone": "+12125551234",
+  "address": "123 Main St",
+  "city": "Anytown",
+  "state": "California",
+  "zipcode": "90210"
+}
