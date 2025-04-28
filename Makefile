@@ -12,8 +12,10 @@ DOCKER_USERNAME=lazydev7
 WEB_BFF=bookstore-web-bff
 MOBILE_BFF=bookstore-mobile-bff
 CUSTOMER_SERVICE=customer-service
-BOOK_SERVICE=book-service
+BOOK_COMMAND_SERVICE=book-command-service
+BOOK_QUERY_SERVICE=book-query-service
 CRM_SERVICE=crm-service
+DB_SYNC=db-sync-service
 
 # Image tags
 TAG=latest
@@ -42,6 +44,7 @@ check-env:
 	@: $(if $(RDS_USER),,$(error RDS_USER is not set))
 	@: $(if $(RDS_PASSWORD),,$(error RDS_PASSWORD is not set))
 	@: $(if $(RDS_DATABASE),,$(error RDS_DATABASE is not set))
+	@: $(if $(MONGODB_URI),,$(error RDS_DATABASE is not set))
 	@echo "All required environment variables set."
 
 # Set up database
@@ -94,7 +97,7 @@ setup-db:
 # Build all Docker images
 build:
 	@echo "Building Docker images..."
-	@for service in $(WEB_BFF) $(MOBILE_BFF) $(CUSTOMER_SERVICE) $(BOOK_SERVICE) $(CRM_SERVICE); do \
+	@for service in $(WEB_BFF) $(MOBILE_BFF) $(CUSTOMER_SERVICE) $(CRM_SERVICE) $(BOOK_COMMAND_SERVICE) $(BOOK_QUERY_SERVICE) $(DB_SYNC); do \
 		echo "Building $$service..."; \
 		docker build --platform linux/amd64 -t $(DOCKER_USERNAME)/$$service:$(TAG) ./$$service || (echo "Failed to build $$service"; exit 1); \
 	done
@@ -106,7 +109,7 @@ push:
 	@docker login --username $(DOCKER_USERNAME) || (echo "Failed to log in to Docker Hub"; exit 1)
 
 	@echo "Pushing images to Docker Hub..."
-	@for service in $(WEB_BFF) $(MOBILE_BFF) $(CUSTOMER_SERVICE) $(BOOK_SERVICE) $(CRM_SERVICE); do \
+	@for service in $(WEB_BFF) $(MOBILE_BFF) $(CUSTOMER_SERVICE) $(CRM_SERVICE) $(BOOK_COMMAND_SERVICE) $(BOOK_QUERY_SERVICE) $(DB_SYNC); do \
 		echo "Pushing $$service..."; \
 		docker push $(DOCKER_USERNAME)/$$service:$(TAG) || (echo "Failed to push $$service"; exit 1); \
 	done

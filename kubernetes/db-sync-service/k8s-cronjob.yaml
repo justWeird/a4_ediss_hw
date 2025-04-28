@@ -1,0 +1,40 @@
+# k8s-cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: book-data-sync
+spec:
+  schedule: "*/1 * * * *"  # Every minute (60 seconds) as required
+  concurrencyPolicy: Forbid  # Don't start a new job if previous hasn't finished
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: book-data-sync
+              image: lazydev7/db-sync-service:latest
+              env:
+                - name: RDS_HOST
+                  value:
+                - name: RDS_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: bookstore-secrets
+                      key: db-user
+                - name: RDS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: bookstore-secrets
+                      key: db-password
+                - name: RDS_DATABASE
+                  value: "bookstore"
+                - name: MONGODB_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: bookstore-secrets
+                      key: mongodb_uri
+                - name: MONGODB_DATABASE
+                  value: "bookstore"
+                - name: MONGODB_COLLECTION
+                  value: "books_jfadiji"
+          restartPolicy: OnFailure
