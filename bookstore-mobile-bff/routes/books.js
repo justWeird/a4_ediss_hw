@@ -153,4 +153,31 @@ router.get('/:ISBN/related-books', async (req, res) => {
     }
 });
 
+//route for keyword search
+router.get('/', async (req, res) => {
+
+    const keyword = req.query.keyword;
+    console.log(`[BFF Route] Received request for keyword search: ${keyword}`);
+
+    try {
+        console.log(`[BFF Route] Calling bookService.callKeywordSearch for keyword: ${keyword}`);
+        const result = await bookService.callKeywordSearch(keyword);
+
+        console.log(`[BFF Route] Received result from callRecService with status: ${result.status}`);
+        console.log(`[BFF Route] Sending response with status: ${result.status}`);
+
+        //no body response
+        if (result.status === 204) {
+            return res.status(204).send();
+        }
+
+        return res.status(result.status).json(result.data);
+    } catch (error) {
+        console.error('[BFF Route] Caught error:', error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+
+})
+
+
 module.exports = router;

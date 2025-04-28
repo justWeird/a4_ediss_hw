@@ -23,7 +23,7 @@ const bookService = {
     addBook: async (book) => {
         try {
             //call a post request and send the book object in the post request
-            const response = await axios.post(`${BASE_URL}/books/`, book);
+            const response = await axios.post(`${BASE_URL}/cmd/books/`, book);
             return response.data;       //return the response data
         } catch (error) {
             console.error('Error adding book', error);
@@ -44,7 +44,7 @@ const bookService = {
             }
 
             //call a put request and send the book object in the put request with the ISBN used to fund it
-            const response = await axios.put(`${BASE_URL}/books/${isbn}`, book);
+            const response = await axios.put(`${BASE_URL}/cmd/books/${isbn}`, book);
             return response.data;       //return the response data
         } catch (error) {
             console.error('Error adding book', error);
@@ -133,7 +133,54 @@ const bookService = {
                 };
             }
         }
+    },
+
+    //method for calling the keyword route via axios
+    callKeywordSearch: async (keyword) => {
+        console.log(`[BFF] Starting callKeywordSearch for keyword: ${keyword}`);
+
+        try {
+            console.log(`[BFF] Making GET request to: ${BASE_URL}/books?keyword=${keyword}`);
+            const response = await axios.get(`${BASE_URL}/books?keyword=${keyword}`);
+            console.log(`[BFF] Received successful response with status: ${response.status}`);
+            console.log(`[BFF] Response data: ${JSON.stringify(response.data).substring(0, 200)}...`);
+            return {
+                status: response.status,
+                data: response.data
+            };
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(`[BFF] Received error response with status: ${error.response.status}`);
+                console.log(`[BFF] Error response data: ${JSON.stringify(error.response.data)}`);
+                return {
+                    status: error.response.status,
+                    data: error.response.data
+                };
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(`[BFF] Request made but no response received`);
+                console.log(`[BFF] Error type: ${error.code}, Message: ${error.message}`);
+                console.error('[BFF] Error request details:', error.request);
+                return {
+                    status: 503, // Service Unavailable
+                    data: { message: "Could not reach keyword service", error }
+                };
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log(`[BFF] Error setting up request: ${error.message}`);
+                console.log(`[BFF] Error stack: ${error.stack}`);
+                return {
+                    status: 500,
+                    data: { message: "Internal server error" }
+                };
+            }
+        }
+
     }
+
+
 
 }
 

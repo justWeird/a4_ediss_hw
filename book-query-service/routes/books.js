@@ -93,7 +93,7 @@ router.get('/', async (req, res) => {
   } catch (error) {
     if (error.message === 'Invalid keyword') {
     console.log(`[Keyword Route] Invalid keyword: ${keyword}`);
-      return res.status(400).send(); // Bad Request
+      return res.status(400).json({ message: "Invalid keyword. Only letters a..z and A..Z are allowed." });
     }
     console.error(error);
     return res.status(500).send('Internal Server Error');
