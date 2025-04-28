@@ -8,6 +8,35 @@ GET http://localhost:3001/status
 GET http://localhost:3000/status
 Content-Type: application/json
 
+
+### Add a book
+POST http://localhost:3000/cmd/books
+Content-Type: application/json
+
+{
+  "ISBN": "978-0321815736",
+  "title": "Software Architecture in Practice",
+  "Author": "Bass, L.",
+  "description": "seminal book on software architecture",
+  "genre": "non-fiction",
+  "price": 59.95,
+  "quantity": 106
+}
+
+### Update a book
+PUT http://localhost:3000/cmd/books/978-0321815736
+Content-Type: application/json
+
+{
+  "ISBN": "978-0321815736",
+  "title": "Software Architecture in Practice",
+  "Author": "Bass, L.",
+  "description": "seminal book on software architecture",
+  "genre": "non-fiction",
+  "price": 59.95,
+  "quantity": 888
+}
+
 ### Try to add the same book again (should return 422 - ISBN already exists)
 POST http://bookstore-dev-ALB-553357670.us-east-1.elb.amazonaws.com:80/books
 Content-Type: application/json
