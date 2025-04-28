@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: book-service
+  name: book-command-service
   namespace: bookstore-ns
 spec:
   replicas: 1  # Only 1 instance as specified in the assignment
   selector:
     matchLabels:
-      app: book-service
+      app: book-command-service
   template:
     metadata:
       labels:
-        app: book-service
+        app: book-command-service
     spec:
       containers:
-        - name: book-service
-          image: lazydev7/book-service:latest
+        - name: book-command-service
+          image: lazydev7/book-command-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

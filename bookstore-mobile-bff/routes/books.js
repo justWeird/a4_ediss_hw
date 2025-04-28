@@ -5,9 +5,16 @@ const {validateBook} = require('../middleware/validation');
 
 
 //readiness probe. checks if external service is ready.
-router.get('/status', async (req, res) => {
+router.get('/status/', async (req, res) => {
+
+    const mode = req.query.mode;
+
+    if (!mode) {
+        return res.status(400).json({ status: 'Missing mode parameter: Command or Query Service' });
+    }
+
     try {
-        const result = await bookService.status();
+        const result = await bookService.status(mode);
         res.status(200).json({status: 'Books service reachable'});
     } catch (error) {
         res.status(503).json({status: 'Books service down'});

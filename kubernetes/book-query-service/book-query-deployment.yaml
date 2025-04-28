@@ -1,39 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: book-service
+  name: book-query-service
   namespace: bookstore-ns
 spec:
   replicas: 1  # Only 1 instance as specified in the assignment
   selector:
     matchLabels:
-      app: book-service
+      app: book-query-service
   template:
     metadata:
       labels:
-        app: book-service
+        app: book-query-service
     spec:
       containers:
         - name: book-service
-          image: lazydev7/book-service:latest
+          image: lazydev7/book-query-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
-            - name: DB_HOST
-              value: "bookstore-db-dev.cluster-cqqkbvimdrwr.us-east-1.rds.amazonaws.com"
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: bookstore-secrets
-                  key: db-user
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: bookstore-secrets
-                  key: db-password
-            - name: DB_NAME
-              value: "bookstore"
+            - name: MONGO_URI
+              value: mongodb+srv://DTechArbiter:TechArbiter@developerday.cyvql.mongodb.net/test?retryWrites=true&w=majority&appName=DeveloperDay/
             - name: PORT
               value: "3000"
             - name: RECOMMENDATION_SERVICE_URL

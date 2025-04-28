@@ -22,8 +22,10 @@ spec:
           env:
             - name: CUSTOMER_SERVICE_URL
               value: "http://customer-service"
-            - name: BOOK_SERVICE_URL
-              value: "http://book-service"
+            - name: BOOK_COMMAND_SERVICE_URL
+              value: "http://book-command-service"
+            - name: BOOK_QUERY_SERVICE_URL
+              value: "http://book-query-service"
             - name: PORT
               value: "8080"
           livenessProbe:

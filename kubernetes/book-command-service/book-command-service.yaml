@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: crm-service
+  name: book-command-service
   namespace: bookstore-ns
 spec:
   selector:
-    app: crm-service
+    app: book-command-service
   ports:
     - port: 80
-      targetPort: 8080
+      targetPort: 3000
   type: LoadBalancer
