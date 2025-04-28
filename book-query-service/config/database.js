@@ -1,31 +1,18 @@
 //mysql and rds connection config
-const mysql = require('mysql2/promise');
-
-//create connection pool
-const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD ?? 'password',
-    database: process.env.DB_NAME || 'bookstore',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+const mongoose = require('mongoose');
 
 // Test database connection
 async function testConnection() {
     try {
-        const connection = await pool.getConnection();
-        console.log('Database connection successful');
-        connection.release();
+        //create the connection
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
-        console.error('Database connection failed:', error);
+        console.error(`Error connecting to database: ${error.message}`);
         process.exit(1);
     }
 }
 
 //expose these variables for use in other packages
-module.exports = {
-    pool,
-    testConnection
-};
+module.exports = { testConnection };

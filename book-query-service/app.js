@@ -34,7 +34,7 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Book Server running on port ${port}`);
+  console.log(`Book Query Server running on port ${port}`);
 });
 
 module.exports = app;

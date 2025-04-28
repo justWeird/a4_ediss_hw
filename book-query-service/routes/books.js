@@ -71,6 +71,36 @@ router.get('/:ISBN/related-books', async (req, res) => {
   }
 });
 
+//new keyword search endpoint
+router.get('/', async (req, res) => {
+  const keyword = req.query.keyword;
+  console.log(`[Keyword Route] Received request for keyword search with keyword: ${keyword}`);
+
+  try {
+
+    console.log(`[Keyword Route] Searching books in MongoDB`);
+    const books = await bookModel.searchBooksByKeyword(keyword);
+
+    if (books.length === 0) {
+    console.log(`[Keyword Route] No related books found with keyword: ${keyword}`);
+      return res.status(204).send();    //no content
+    }
+
+    //return the books
+    console.log(`[Keyword Route] Found books. Returning Data`);
+    return res.status(200).json(books);
+
+  } catch (error) {
+    if (error.message === 'Invalid keyword') {
+    console.log(`[Keyword Route] Invalid keyword: ${keyword}`);
+      return res.status(400).send(); // Bad Request
+    }
+    console.error(error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+})
+
 
 
 module.exports = router;

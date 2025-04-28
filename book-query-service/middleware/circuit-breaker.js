@@ -7,6 +7,8 @@ const axios = require('axios');
 
 //configure the state
 const circuitStateFile = path.join('/app/circuit-state', 'state.json');
+// local state.json
+// const circuitStateFile = path.join('./config', 'state.json');
 const OPEN = 'OPEN';
 const CLOSED = 'CLOSED';
 

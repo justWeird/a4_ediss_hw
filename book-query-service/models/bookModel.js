@@ -1,92 +1,99 @@
 //model interacts with the DB. it queries the DB in CRUD
+const mongoose = require('mongoose');
 
-//import the pool element from the database directory. the pool executes all database query
-const { pool } = require('../config/database');
+const bookSchema = new mongoose.Schema({
+    ISBN: {
+        type: String,
+        required: true,
+        unique: true, // Equivalent to primary key
+        trim: true
+    },
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    Author: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    genre: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    price: {
+        type: mongoose.Types.Decimal128,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        min: 0
+    }
+}, {
+    timestamps: true // Optional: adds createdAt and updatedAt fields automatically
+});
+
+const Book = mongoose.model('books', bookSchema);
+
 
 //create the book model that will be used in other parts of the app
 const bookModel = {
-    // Add a new book
-    async addBook(book) {
-        //string literal for the query
-        const query = `INSERT INTO books (ISBN, title, Author, description, genre, price, quantity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-        // Parse price to float/number before inserting and fix to 2 decimal places
-        const priceValue = parseFloat(parseFloat(book.price).toFixed(2));
-
-        //execute the query and set the values to be added.
-        const [result] = await pool.execute(query, [
-            book.ISBN,
-            book.title,
-            book.Author,
-            book.description,
-            book.genre,
-            priceValue,
-            book.quantity
-        ]);
-
-        //return the book value
-        return {
-            ...book,
-            price: priceValue // Ensure it returns as a number
-        };
-    },
-
-    // Update a book
-    async updateBook(ISBN, book) {
-        const query = ` UPDATE books SET title = ?, Author = ?, description = ?, genre = ?, price = ?, quantity = ? WHERE ISBN = ?`;
-
-        // Parse price to float/number before inserting and fix to 2 decimal places
-        const priceValue = parseFloat(parseFloat(book.price).toFixed(2));
-        //execute query and set values needed
-        const [result] = await pool.execute(query, [
-            book.title,
-            book.Author,
-            book.description,
-            book.genre,
-            priceValue,
-            book.quantity,
-            ISBN
-        ]);
-
-        //if the update goes through, it will affect certain rows
-        if (result.affectedRows === 0) {
-            return null;
-        }
-
-        //return the book
-        // Return the book with the price as a number
-        return {
-            ...book,
-            price: priceValue // Ensure it returns as a number
-        };
-    },
 
     // Get book by ISBN
     async getBookByISBN(ISBN) {
-        const query = `SELECT * FROM books WHERE ISBN = ?`;
+        const book = await Book.findOne({ ISBN }).lean();
 
-        const [rows] = await pool.execute(query, [ISBN]);
-
-        if (rows.length === 0) {
+        if (!book) {
             return null;
         }
 
-        // Convert price to number when retrieving
-        const book = rows[0];
+        // Convert price from Decimal128 to number
         return {
             ...book,
-            price: parseFloat(book.price) // Ensure it returns as a number
+            price: parseFloat(book.price.toString())
         };
     },
 
-    // Check if a book exists
+    // Check if a book exists by ISBN
     async isbnExists(ISBN) {
-        const query = `SELECT 1 FROM books WHERE ISBN = ? `;
+        const exists = await Book.exists({ ISBN });
+        return !!exists;
+    },
 
-        const [rows] = await pool.execute(query, [ISBN]);
+    async searchBooksByKeyword(keyword) {
+        // Validate keyword (only letters a-zA-Z)
+        if (!/^[a-zA-Z]+$/.test(keyword)) {
+            throw new Error('Invalid keyword');
+        }
 
-        return rows.length > 0;
+        // Build a case-insensitive regex
+        const regex = new RegExp(keyword, 'i');
+
+        // Perform search in title, Author, description, or genre
+        const books = await Book.find({
+            $or: [
+                { title: regex },
+                { Author: regex },
+                { description: regex },
+                { genre: regex }
+            ]
+        }).lean();
+
+        // Map price from Decimal128 to number
+        return books.map(book => ({
+            ...book,
+            price: parseFloat(book.price.toString())
+        }));
     }
+
+
 };
 
 //export the book model. to be used in routes and more
