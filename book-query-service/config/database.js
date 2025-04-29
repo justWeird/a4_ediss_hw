@@ -1,18 +1,28 @@
-//mysql and rds connection config
+// In your config/database.js (or wherever you define your MongoDB connection)
 const mongoose = require('mongoose');
 
-// Test database connection
-async function testConnection() {
-    try {
-        //create the connection
-        const conn = await mongoose.connect(process.env.MONGO_URI);
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://user:password@cluster.mongodb.net/BooksDB';
 
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+const connectDB = async () => {
+    try {
+        await mongoose.connect(MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log(`MongoDB Connected: ${mongoose.connection.host}`);
     } catch (error) {
-        console.error(`Error connecting to database: ${error.message}`);
+        console.error(`Error connecting to MongoDB: ${error.message}`);
         process.exit(1);
     }
-}
+};
 
-//expose these variables for use in other packages
-module.exports = { testConnection };
+const testConnection = async () => {
+    try {
+        // Just trigger the connection
+        await connectDB();
+    } catch (error) {
+        console.error(`Error testing connection: ${error.message}`);
+    }
+};
+
+module.exports = { connectDB, testConnection };
