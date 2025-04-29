@@ -13,7 +13,8 @@ router.get('/isbn/:ISBN', async (req, res) => {
     const { ISBN } = req.params;
 
     // Get book from database
-    const book = await bookModel.getBookByISBN(ISBN);
+    const book = await waitForBookToAppear(ISBN);
+
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
@@ -32,7 +33,7 @@ router.get('/:ISBN', async (req, res) => {
     const { ISBN } = req.params;
 
     // Get book from database
-    const book = await bookModel.getBookByISBN(ISBN);
+    const book = await waitForBookToAppear(ISBN);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
@@ -101,6 +102,23 @@ router.get('/', async (req, res) => {
 
 })
 
+async function waitForBookToAppear(ISBN, retries = 10, delayMs = 10000) {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const book = await bookService.getBookByISBN(ISBN);
+      if (book) {
+        return book;
+      }
+    } catch (error) {
+      if (error.status !== 404) {
+        throw error; // Only swallow 404, real errors should be thrown
+      }
+    }
+    // Wait before retrying
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+  }
+  return null; // Still not found after retries
+}
 
 
 module.exports = router;
