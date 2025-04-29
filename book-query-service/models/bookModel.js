@@ -40,7 +40,7 @@ const bookSchema = new mongoose.Schema({
     timestamps: true // Optional: adds createdAt and updatedAt fields automatically
 });
 
-const Book = mongoose.model('books', bookSchema);
+const Book = mongoose.model('books_jfadiji', bookSchema);
 
 
 //create the book model that will be used in other parts of the app
