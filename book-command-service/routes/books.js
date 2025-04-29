@@ -1,4 +1,4 @@
-//book related end point
+//books route for book-command-service
 
 // routes/books.js
 const express = require('express');

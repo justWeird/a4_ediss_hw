@@ -1,4 +1,4 @@
-//model interacts with the DB. it queries the DB in CRUD
+//book model for book-command-service
 
 //import the pool element from the database directory. the pool executes all database query
 const { pool } = require('../config/database');

@@ -1,4 +1,4 @@
-//model interacts with the DB. it queries the DB in CRUD
+//book model for book-query-service
 const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema({

@@ -33,7 +33,7 @@ REMOTE_K8S_DIR=~/kubernetes
 # Default target
 all: check-env setup-db build push ec2 clean
 
-update: check-env setup-db build push patch
+update: check-env setup-db clear-mongodb build push patch
 
 clear-all-dbs: setup-db clear-mongodb
 

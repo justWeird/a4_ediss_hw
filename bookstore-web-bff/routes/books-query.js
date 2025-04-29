@@ -23,8 +23,8 @@ router.get('/isbn/:ISBN', async (req, res) => {
 
     try {
         // Get book from database
-        console.log(`[QUERY-ROUTE] Calling getBookByISBN for ISBN: ${ISBN}`);
-        const book = await bookService.getBookByISBN(ISBN);
+        console.log(`[QUERY-ROUTE] Calling waitForBookToAppear for ISBN: ${ISBN}`);
+        const book = await waitForBookToAppear(ISBN);
 
         if (!book) {
             console.log(`[QUERY-ROUTE] Book with ISBN ${ISBN} not found, returning 404`);
@@ -58,8 +58,8 @@ router.get('/:ISBN', async (req, res) => {
 
     try {
         // Get book from service
-        console.log(`[QUERY-ROUTE] Calling getBookByISBN for ISBN: ${ISBN}`);
-        const book = await bookService.getBookByISBN(ISBN);
+        console.log(`[QUERY-ROUTE] Calling waitForBookToAppear for ISBN: ${ISBN}`);
+        const book = await waitForBookToAppear(ISBN);
 
         if (!book) {
             console.log(`[QUERY-ROUTE] Book with ISBN ${ISBN} not found, returning 404`);
@@ -138,5 +138,45 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
+//polling route for eventual consistency
+router.get('/sync-status/:ISBN', async (req, res) => {
+    const { ISBN } = req.params;
+    console.log(`[SYNC-STATUS] Polling status for ISBN: ${ISBN}`);
+
+    try {
+        const book = await bookService.getBookByISBN(ISBN);
+        if (book) {
+            return res.status(200).json({ status: "available", book });
+        } else {
+            return res.status(202).json({ status: "syncing" });
+        }
+    } catch (err) {
+        if (err.status === 404) {
+            return res.status(202).json({ status: "syncing" });
+        }
+        console.error('[SYNC-STATUS] Error:', err.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+async function waitForBookToAppear(ISBN, retries = 7, delayMs = 10000) {
+    for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+            const book = await bookService.getBookByISBN(ISBN);
+            if (book) {
+                return book;
+            }
+        } catch (error) {
+            if (error.status !== 404) {
+                throw error; // Only swallow 404, real errors should be thrown
+            }
+        }
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+    return null; // Still not found after retries
+}
+
 
 module.exports = router;

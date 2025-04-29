@@ -1,4 +1,4 @@
-//book related end point
+//book route for book-query
 
 // routes/books.js
 const express = require('express');

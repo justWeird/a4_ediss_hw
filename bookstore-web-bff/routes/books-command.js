@@ -46,8 +46,12 @@ router.post('/', validateBook, async (req, res) => {
         res.location(locationUrl);
 
         // Return successful response
-        console.log('[CMD-ROUTE] Returning 201 Created response');
-        res.status(201).json(newBook);
+        console.log('[CMD-ROUTE] Returning 202 and redirecting to wait for eventual consistency.');
+        res.status(202).json({
+            message: "Book creation request accepted. Book will become available soon.",
+            isbn: newBook.ISBN,
+            statusUrl: `/books/sync-status/${newBook.ISBN}`
+        });
     } catch (error) {
         console.error('[CMD-ROUTE] Error adding book:', error.message);
         if (error.response) {
@@ -81,8 +85,12 @@ router.put('/:ISBN', validateBook, async (req, res) => {
         console.log('[CMD-ROUTE] Book updated successfully:', JSON.stringify(updatedBook));
 
         // Return successful response
-        console.log('[CMD-ROUTE] Returning 200 OK response');
-        res.status(200).json(updatedBook);
+        console.log('[CMD-ROUTE] Returning 202 and pinging poll');
+        res.status(202).json({
+            message: "Book update request accepted.  Book will become available soon.",
+            isbn: updatedBook.ISBN,
+            statusUrl: `/books/sync-status/${updatedBook.ISBN}`
+        });
 
     } catch (error) {
         console.error('[CMD-ROUTE] Error updating book:', error.message);
