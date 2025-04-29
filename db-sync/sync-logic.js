@@ -13,11 +13,20 @@ async function performSync(rdsConnection, mongoClient) {
 }
 
 async function extractBooksFromRDS(connection) {
-    //talk to RDS and query the db to get all books data
-    const [rows] = await connection.execute(
-        'SELECT ISBN, title, Author, description, genre, price, quantity FROM Books'
-    );
-    return rows;
+    try {
+        // First, list all tables to find the right one
+        const [tables] = await connection.execute('SHOW TABLES');
+        console.log('Available tables:', tables);
+
+        // Then try to query the right table
+        const [rows] = await connection.execute(
+            'SELECT ISBN, title, Author, description, genre, price, quantity FROM books'
+        );
+        return rows;
+    } catch (error) {
+        console.error('Error querying database:', error);
+        throw error;
+    }
 }
 
 function transformBooks(books) {

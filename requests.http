@@ -86,7 +86,7 @@ GET http://localhost:3000/books?keyword=uyy76
 Content-Type: application/json
 
 ###local testing
-GET http://localhost:80/books/isbn/978-0321815736
+GET http://aa7af25a2483e4ed0a4aa100f73c626c-365038258.us-east-1.elb.amazonaws.com:80/books/isbn/978-0321815736
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFybG9yZCIsInJvbGVzIjoicGlsb3QsaGVybyxkaiIsImlzcyI6ImNtdS5lZHUiLCJleHAiOjE3NzQ4MDUwOTgsInVzcm4iOiJQZXRlciBRdWlsbCIsImlhdCI6MTc0MDkwNjIxNn0.1LITbL7RYIJsTE48G9hGIaTeaNPl_Sx5VvlbaFM0qdk
 X-Client-Type: web

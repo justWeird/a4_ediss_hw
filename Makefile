@@ -15,7 +15,7 @@ CUSTOMER_SERVICE=customer-service
 BOOK_COMMAND_SERVICE=book-command-service
 BOOK_QUERY_SERVICE=book-query-service
 CRM_SERVICE=crm-service
-DB_SYNC=db-sync-service
+DB_SYNC=db-sync
 
 # Image tags
 TAG=latest
@@ -33,7 +33,7 @@ REMOTE_K8S_DIR=~/kubernetes
 # Default target
 all: check-env setup-db build push ec2 clean
 
-update: check-env setup-db build push patchx
+update: check-env setup-db build push patch
 
 # Check required environment variables
 check-env:
@@ -185,7 +185,7 @@ logs:
 	ssh -i $(SSH_KEY_PATH) ec2-user@$(EC2_K8S_ACCESS) "kubectl logs -l app=$$service -n bookstore-ns --tail=100 -f"
 
 #update k8s images
-patch:
+patch: process-k8s-templates
 	@echo "Updating K8s Images..."
 	# Copy processed Kubernetes files to EC2
 	scp -i $(SSH_KEY_PATH) -r $(K8S_DIR)/processed/* ec2-user@$(EC2_K8S_ACCESS):$(REMOTE_K8S_DIR)/ || (echo "Failed to copy Kubernetes files"; exit 1)
