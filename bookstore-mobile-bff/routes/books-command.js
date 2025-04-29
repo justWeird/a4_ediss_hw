@@ -75,17 +75,6 @@ router.put('/:ISBN', validateBook, async (req, res) => {
             return res.status(400).json({message: "ISBN in URL does not match ISBN in request body"});
         }
 
-        // Check if ISBN exists
-        console.log(`[CMD-ROUTE] Checking if book with ISBN ${ISBN} exists`);
-        const existingBook = await bookService.getBookByISBN(ISBN);
-        console.log('[CMD-ROUTE] Existing book:', existingBook ? 'Found' : 'Not found');
-
-        //if the book doesn't exist, then shift
-        if (!existingBook) {
-            console.log(`[CMD-ROUTE] Book with ISBN ${ISBN} not found, returning 404`);
-            return res.status(404).json({message: "Book not found"});
-        }
-
         // Update book in database
         console.log(`[CMD-ROUTE] Updating book with ISBN ${ISBN}`);
         const updatedBook = await bookService.updateBook(ISBN, book);

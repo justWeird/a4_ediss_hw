@@ -33,12 +33,6 @@ router.get('/isbn/:ISBN', async (req, res) => {
 
         console.log(`[QUERY-ROUTE] Book found:`, JSON.stringify(book));
 
-        //mobile bff modification
-        if (book.genre === 'non-fiction') {
-            console.log('[QUERY-ROUTE] Converting genre "non-fiction" to numeric value 3');
-            book.genre = 3;
-        }
-
         // Return successful response
         console.log('[QUERY-ROUTE] Returning 200 OK response');
         res.status(200).json(book);
