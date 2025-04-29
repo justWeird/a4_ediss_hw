@@ -105,7 +105,7 @@ router.get('/', async (req, res) => {
 async function waitForBookToAppear(ISBN, retries = 10, delayMs = 10000) {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      const book = await bookService.getBookByISBN(ISBN);
+      const book = await bookModel.getBookByISBN(ISBN);
       if (book) {
         return book;
       }
