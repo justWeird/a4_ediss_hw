@@ -41,7 +41,7 @@ const bookSchema = new mongoose.Schema({
 });
 // In bookModel.js
 const COLLECTION_NAME = 'books_jfadiji'; // Define it as a constant to avoid typos
-const Book = mongoose.model(COLLECTION_NAME, bookSchema);
+const Book = mongoose.model('Book', bookSchema, COLLECTION_NAME);
 
 //create the book model that will be used in other parts of the app
 const bookModel = {
