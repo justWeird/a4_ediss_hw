@@ -23,8 +23,8 @@ router.get('/isbn/:ISBN', async (req, res) => {
 
     try {
         // Get book from database
-        console.log(`[QUERY-ROUTE] Calling waitForBookToAppear for ISBN: ${ISBN}`);
-        const book = await waitForBookToAppear(ISBN);
+        console.log(`[QUERY-ROUTE] Calling getBookByISBN for ISBN: ${ISBN}`);
+        const book = await bookService.getBookByISBN(ISBN);
 
         if (!book) {
             console.log(`[QUERY-ROUTE] Book with ISBN ${ISBN} not found, returning 404`);
@@ -58,8 +58,8 @@ router.get('/:ISBN', async (req, res) => {
 
     try {
         // Get book from service
-        console.log(`[QUERY-ROUTE] Calling waitForBookToAppear for ISBN: ${ISBN}`);
-        const book = await waitForBookToAppear(ISBN);
+        console.log(`[QUERY-ROUTE] Calling getBookByISBN for ISBN: ${ISBN}`);
+        const book = await bookService.getBookByISBN(ISBN);
 
         if (!book) {
             console.log(`[QUERY-ROUTE] Book with ISBN ${ISBN} not found, returning 404`);
@@ -180,3 +180,4 @@ async function waitForBookToAppear(ISBN, retries = 9, delayMs = 8000) {
 
 
 module.exports = router;
+module.exports = { waitForBookToAppear };
