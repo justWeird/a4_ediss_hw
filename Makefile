@@ -35,6 +35,8 @@ all: check-env setup-db build push ec2 clean
 
 update: check-env setup-db build push patch
 
+clear-all-dbs: setup-db clear-mongodb
+
 # Check required environment variables
 check-env:
 	@echo "Checking required environment variables..."

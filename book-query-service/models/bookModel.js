@@ -56,8 +56,13 @@ const bookModel = {
 
         // Convert price from Decimal128 to number
         return {
-            ...book,
-            price: parseFloat(book.price.toString())
+            ISBN: book.ISBN,
+            title: book.title,
+            Author: book.Author,
+            description: book.description,
+            genre: book.genre,
+            price: parseFloat(book.price.toString()),
+            quantity: book.quantity
         };
     },
 
@@ -88,8 +93,13 @@ const bookModel = {
 
         // Map price from Decimal128 to number
         return books.map(book => ({
-            ...book,
-            price: parseFloat(book.price.toString())
+            ISBN: book.ISBN,
+            title: book.title,
+            Author: book.Author,
+            description: book.description,
+            genre: book.genre,
+            price: parseFloat(book.price.toString()),
+            quantity: book.quantity
         }));
     }
 
