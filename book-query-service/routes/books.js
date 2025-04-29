@@ -9,42 +9,49 @@ const recommendationService = require('../services/recommendationService');
 // Add Book endpoints - only contains get endpoints
 // Retrieve Book endpoint (both /books/:ISBN and /books/isbn/:ISBN)
 router.get('/isbn/:ISBN', async (req, res) => {
-  try {
-    const { ISBN } = req.params;
+  const { ISBN } = req.params;
+  console.log(`[GET /isbn/${ISBN}] Received request`);
 
-    // Get book from database
+  try {
+    console.log(`[GET /isbn/${ISBN}] Calling waitForBookToAppear`);
     const book = await waitForBookToAppear(ISBN);
 
     if (!book) {
+      console.warn(`[GET /isbn/${ISBN}] Book not found after retries`);
       return res.status(404).json({ message: "Book not found" });
     }
 
-    // Return successful response
+    console.log(`[GET /isbn/${ISBN}] Book found. Returning response`);
     res.status(200).json(book);
   } catch (error) {
-    console.error('Error retrieving book:', error);
+    console.error(`[GET /isbn/${ISBN}] Internal error:`, error.message || error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // Additional route for /books/isbn/:ISBN
 router.get('/:ISBN', async (req, res) => {
-  try {
-    const { ISBN } = req.params;
+  const { ISBN } = req.params;
+  console.log(`[GET /${ISBN}] Received request`);
 
-    // Get book from database
+  try {
+    console.log(`[GET /${ISBN}] Calling waitForBookToAppear`);
     const book = await waitForBookToAppear(ISBN);
+
     if (!book) {
+      console.warn(`[GET /${ISBN}] Book not found after retries`);
       return res.status(404).json({ message: "Book not found" });
     }
 
-    // Return successful response
+    console.log(`[GET /${ISBN}] Book found. Returning response`);
     res.status(200).json(book);
   } catch (error) {
-    console.error('Error retrieving book:', error);
+    console.error(`[GET /${ISBN}] Internal error:`, error.message || error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 //related-books endpoint
 router.get('/:ISBN/related-books', async (req, res) => {
@@ -103,22 +110,37 @@ router.get('/', async (req, res) => {
 })
 
 async function waitForBookToAppear(ISBN, retries = 9, delayMs = 8000) {
+  console.log(`[WAIT-FOR-BOOK] Start polling for ISBN: ${ISBN}`);
+
   for (let attempt = 0; attempt < retries; attempt++) {
+    console.log(`[WAIT-FOR-BOOK] Attempt ${attempt + 1} of ${retries}`);
+
     try {
       const book = await bookModel.getBookByISBN(ISBN);
+
       if (book) {
+        console.log(`[WAIT-FOR-BOOK] Book found on attempt ${attempt + 1}: ${ISBN}`);
         return book;
+      } else {
+        console.log(`[WAIT-FOR-BOOK] Book not found on attempt ${attempt + 1}`);
       }
     } catch (error) {
       if (error.status !== 404) {
-        throw error; // Only swallow 404, real errors should be thrown
+        console.error(`[WAIT-FOR-BOOK] Error on attempt ${attempt + 1}:`, error.message);
+        throw error;
+      } else {
+        console.log(`[WAIT-FOR-BOOK] 404 on attempt ${attempt + 1}: Book not yet in MongoDB`);
       }
     }
-    // Wait before retrying
+
+    console.log(`[WAIT-FOR-BOOK] Waiting ${delayMs / 1000} seconds before retrying...`);
     await new Promise(resolve => setTimeout(resolve, delayMs));
   }
+
+  console.warn(`[WAIT-FOR-BOOK] Book with ISBN ${ISBN} not found after ${retries} attempts`);
   return null; // Still not found after retries
 }
+
 
 
 module.exports = router;
