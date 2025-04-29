@@ -7,7 +7,6 @@ require('dotenv').config();
 const COMMAND_BASE_URL = process.env.BOOK_COMMAND_SERVICE_URL || 'http://book-command-service';
 const QUERY_BASE_URL = process.env.BOOK_QUERY_SERVICE_URL || 'http://book-query-service';
 
-
 const bookService = {
 
     //status check
@@ -34,9 +33,9 @@ const bookService = {
     addBook: async (book) => {
         try {
             //call a post request and send the book object in the post request
-            const response = await axios.post(`${BASE_URL}/books/`, book);
+            const response = await axios.post(`${COMMAND_BASE_URL}/cmd/books/`, book);
             return response.data;       //return the response data
-        } catch (error){
+        } catch (error) {
             console.error('Error adding book', error);
             throw error;
         }
@@ -55,9 +54,9 @@ const bookService = {
             }
 
             //call a put request and send the book object in the put request with the ISBN used to fund it
-            const response = await axios.put(`${BASE_URL}/books/${isbn}`, book);
+            const response = await axios.put(`${COMMAND_BASE_URL}/cmd/books/${isbn}`, book);
             return response.data;       //return the response data
-        } catch (error){
+        } catch (error) {
             console.error('Error adding book', error);
             throw error;
         }
@@ -77,9 +76,9 @@ const bookService = {
             }
 
             //call a get request
-            const response = await axios.get(`${BASE_URL}/books/${isbn}`);
+            const response = await axios.get(`${QUERY_BASE_URL}/books/${isbn}`);
             return response.data;
-        } catch (error){
+        } catch (error) {
             console.error('Error getting book', error);
             throw error;
         }
@@ -89,10 +88,10 @@ const bookService = {
     //isbnExists
     isbnExists: async (isbn) => {
         try {
-          //call a get request
-          const response = await axios.get(`${BASE_URL}/books/${isbn}`);
-          return true;
-        } catch(error){
+            //call a get request
+            const response = await axios.get(`${QUERY_BASE_URL}/books/${isbn}`);
+            return true;
+        } catch (error) {
             if (error.response && error.response.status === 404) {
                 return false; // Book does not exist — expected case
             }
@@ -107,8 +106,8 @@ const bookService = {
     callRecService: async (isbn) => {
         console.log(`[BFF] Starting callRecService for ISBN: ${isbn}`);
         try {
-            console.log(`[BFF] Making GET request to: ${BASE_URL}/books/${isbn}/related-books`);
-            const response = await axios.get(`${BASE_URL}/books/${isbn}/related-books`);
+            console.log(`[BFF] Making GET request to: ${QUERY_BASE_URL}/books/${isbn}/related-books`);
+            const response = await axios.get(`${QUERY_BASE_URL}/books/${isbn}/related-books`);
             console.log(`[BFF] Received successful response with status: ${response.status}`);
             console.log(`[BFF] Response data: ${JSON.stringify(response.data).substring(0, 200)}...`);
             return {
@@ -146,14 +145,13 @@ const bookService = {
         }
     },
 
-
     //method for calling the keyword route via axios
     callKeywordSearch: async (keyword) => {
         console.log(`[BFF] Starting callKeywordSearch for keyword: ${keyword}`);
 
         try {
-            console.log(`[BFF] Making GET request to: ${BASE_URL}/books?keyword=${keyword}`);
-            const response = await axios.get(`${BASE_URL}/books?keyword=${keyword}`);
+            console.log(`[BFF] Making GET request to: ${QUERY_BASE_URL}/books?keyword=${keyword}`);
+            const response = await axios.get(`${QUERY_BASE_URL}/books?keyword=${keyword}`);
             console.log(`[BFF] Received successful response with status: ${response.status}`);
             console.log(`[BFF] Response data: ${JSON.stringify(response.data).substring(0, 200)}...`);
             return {
@@ -191,6 +189,8 @@ const bookService = {
         }
 
     }
+
+
 
 }
 
