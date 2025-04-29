@@ -192,3 +192,8 @@ patch: process-k8s-templates
 	ssh -i $(SSH_KEY_PATH) ec2-user@$(EC2_K8S_ACCESS) "kubectl apply -f $(REMOTE_K8S_DIR) -n bookstore-ns" || (echo "Failed to apply configurations"; exit 1)
 	ssh -i $(SSH_KEY_PATH) ec2-user@$(EC2_K8S_ACCESS) "kubectl rollout restart deployment -n bookstore-ns" || (echo "Failed to restart deployments"; exit 1)
 	@echo "Successfully updated all kubernetes images"
+
+# Clear MongoDB collection
+clear-mongodb:
+	@echo "Clearing MongoDB collection books_jfadiji..."
+	@node clear-mongodb.js
