@@ -1,7 +1,8 @@
 //import needed libraries
 const express = require('express');
 const cors = require('cors');
-const bookRoutes = require('./routes/books');
+const bookCommandRoutes = require('./routes/books-command');
+const bookQueryRoutes = require('./routes/books-query');
 const customerRoutes = require('./routes/customers');
 const {validateJWT} = require('./middleware/jwtMiddleware');
 const clientTypeMiddleware = require('./middleware/clientTypeMiddleware');
@@ -26,7 +27,8 @@ app.use(clientTypeMiddleware);
 app.use(validateJWT);
 
 // Routes
-app.use('/books', bookRoutes);
+app.use('/books', bookQueryRoutes);
+app.use('/cmd/books', bookCommandRoutes);
 app.use('/customers', customerRoutes);
 
 app.listen(PORT, () => {

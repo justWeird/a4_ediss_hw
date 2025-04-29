@@ -10,18 +10,19 @@ const QUERY_BASE_URL = process.env.BOOK_QUERY_SERVICE_URL || 'http://book-query-
 const bookService = {
 
     //status check
-    status: async (mode) => {
+    commandStatus: async () => {
         try {
-
-            const normalizedMode = mode.toLowerCase();
-
-            if (normalizedMode === "command") {
                 return await axios.get(`${COMMAND_BASE_URL}/status`);
-            } else if (normalizedMode === "query") {
+        } catch (error) {
+            console.error('Error getting book status', error);
+            throw error;
+        }
+
+    },
+
+    queryStatus: async () => {
+        try {
                 return await axios.get(`${QUERY_BASE_URL}/status`);
-            } else {
-                throw new Error("Invalid mode parameter");
-            }
         } catch (error) {
             console.error('Error getting book status', error);
             throw error;
