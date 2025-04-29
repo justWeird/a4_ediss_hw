@@ -1,6 +1,4 @@
 
-
-
 // sync-service/sync-logic.js
 async function performSync(rdsConnection, mongoClient) {
     // 1. Extract: Get all books from RDS

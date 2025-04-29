@@ -1,7 +1,7 @@
 // sync-service/index.js
 require('dotenv').config();
 const mysql = require('mysql2/promise');
-const { MongoClient } = require('mongoose');
+const { MongoClient } = require('mongodb');
 const {syncWithRetry} = require("./sync-retry");
 
 // Main sync function that will be called periodically

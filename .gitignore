@@ -56,3 +56,5 @@ temp/
 # Misc
 .eslintcache
 .cache
+
+secrets.yaml
