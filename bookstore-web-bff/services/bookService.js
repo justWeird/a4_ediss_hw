@@ -4,15 +4,25 @@ const axios = require('axios')
 require('dotenv').config();
 
 //get the base url that the backend is using to make requests
-const BASE_URL = process.env.BOOK_SERVICE_URL || 'http://book-service';
+const COMMAND_BASE_URL = process.env.BOOK_COMMAND_SERVICE_URL || 'http://book-command-service';
+const QUERY_BASE_URL = process.env.BOOK_QUERY_SERVICE_URL || 'http://book-query-service';
 
 
 const bookService = {
 
     //status check
-    status: async () => {
+    status: async (mode) => {
         try {
-            return await axios.get(`${BASE_URL}/status`);
+
+            const normalizedMode = mode.toLowerCase();
+
+            if (normalizedMode === "command") {
+                return await axios.get(`${COMMAND_BASE_URL}/status`);
+            } else if (normalizedMode === "query") {
+                return await axios.get(`${QUERY_BASE_URL}/status`);
+            } else {
+                throw new Error("Invalid mode parameter");
+            }
         } catch (error) {
             console.error('Error getting book status', error);
             throw error;
