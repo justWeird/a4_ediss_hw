@@ -46,8 +46,8 @@ router.post('/', validateBook, async (req, res) => {
         res.location(locationUrl);
 
         // Return successful response
-        console.log('[CMD-ROUTE] Returning 201 Created response');
-        res.status(201).json(newBook);
+        console.log('[CMD-ROUTE] Returning 200 Created response');
+        res.status(200).json(newBook);
     } catch (error) {
         console.error('[CMD-ROUTE] Error adding book:', error.message);
         if (error.response) {
