@@ -46,7 +46,7 @@ router.post('/', validateBook, async (req, res) => {
         // TEST ONLY: wait until the book is available in Mongo (query-side)
         if (TEST_MODE) {
             console.log(`[CMD-ROUTE] [TEST_MODE] Waiting for book to appear in query DB`);
-            const confirmed = await waitForBookToAppear(isbn, 9, 8000);
+            const confirmed = await waitForBookToAppear(isbn);
             if (!confirmed) {
                 console.warn(`[CMD-ROUTE] [TEST_MODE] Book did not appear after retries`);
                 return res.status(500).json({ message: "Book not available after consistency delay" });
@@ -101,7 +101,7 @@ router.put('/:ISBN', validateBook, async (req, res) => {
         // TEST ONLY: wait until the book is available in Mongo (query-side)
         if (TEST_MODE) {
             console.log(`[CMD-ROUTE] [TEST_MODE] Waiting for book to appear in query DB`);
-            const confirmed = await waitForBookToAppear(ISBN, 9, 8000);
+            const confirmed = await waitForBookToAppear(ISBN);
             if (!confirmed) {
                 console.warn(`[CMD-ROUTE] [TEST_MODE] Book did not appear after retries`);
                 return res.status(500).json({ message: "Book not available after consistency delay" });
@@ -129,7 +129,7 @@ router.put('/:ISBN', validateBook, async (req, res) => {
     }
 });
 
-async function waitForBookToAppear(ISBN, retries = 9, delayMs = 8000) {
+async function waitForBookToAppear(ISBN, retries = 5, delayMs = 2000) {
     for (let attempt = 0; attempt < retries; attempt++) {
         try {
             const book = await bookService.getBookByISBN(ISBN);
