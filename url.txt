@@ -1,4 +1,4 @@
-http://aa7af25a2483e4ed0a4aa100f73c626c-365038258.us-east-1.elb.amazonaws.com:80
-http://a94c6b78258eb41759d4ba08d13c311e-1015363301.us-east-1.elb.amazonaws.com:80
+http://afd86e68b1ee643d68c78629d2a953b5-127821960.us-east-1.elb.amazonaws.com:80
+http://a65bca3d41c514e8a96394d0b7ffcf6e-1529405771.us-east-1.elb.amazonaws.com:80
 jfadiji
 justweird007@gmail.com
