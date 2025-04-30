@@ -42,7 +42,7 @@ router.post('/', validateBook, async (req, res) => {
         console.log('[CMD-ROUTE] Book added successfully:', JSON.stringify(newBook));
 
         //initialize wait
-        const TEST_MODE = true;
+        const TEST_MODE = false;
         // TEST ONLY: wait until the book is available in Mongo (query-side)
         if (TEST_MODE) {
             console.log(`[CMD-ROUTE] [TEST_MODE] Waiting for book to appear in query DB`);
@@ -97,7 +97,7 @@ router.put('/:ISBN', validateBook, async (req, res) => {
         console.log('[CMD-ROUTE] Book updated successfully:', JSON.stringify(updatedBook));
 
         //initialize wait
-        const TEST_MODE = true;
+        const TEST_MODE = false;
         // TEST ONLY: wait until the book is available in Mongo (query-side)
         if (TEST_MODE) {
             console.log(`[CMD-ROUTE] [TEST_MODE] Waiting for book to appear in query DB`);
@@ -129,7 +129,7 @@ router.put('/:ISBN', validateBook, async (req, res) => {
     }
 });
 
-async function waitForBookToAppear(ISBN, retries = 5, delayMs = 2000) {
+async function waitForBookToAppear(ISBN, retries = 3, delayMs = 2000) {
     for (let attempt = 0; attempt < retries; attempt++) {
         try {
             const book = await bookService.getBookByISBN(ISBN);
