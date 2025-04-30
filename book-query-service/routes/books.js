@@ -109,7 +109,7 @@ router.get('/', async (req, res) => {
 
 })
 
-async function waitForBookToAppear(ISBN, retries = 9, delayMs = 8000) {
+async function waitForBookToAppear(ISBN, retries = 5, delayMs = 2000) {
   console.log(`[WAIT-FOR-BOOK] Start polling for ISBN: ${ISBN}`);
 
   for (let attempt = 0; attempt < retries; attempt++) {
