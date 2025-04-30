@@ -160,24 +160,5 @@ router.get('/sync-status/:ISBN', async (req, res) => {
     }
 });
 
-async function waitForBookToAppear(ISBN, retries = 9, delayMs = 8000) {
-    for (let attempt = 0; attempt < retries; attempt++) {
-        try {
-            const book = await bookService.getBookByISBN(ISBN);
-            if (book) {
-                return book;
-            }
-        } catch (error) {
-            if (error.status !== 404) {
-                throw error; // Only swallow 404, real errors should be thrown
-            }
-        }
-        // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, delayMs));
-    }
-    return null; // Still not found after retries
-}
-
 
 module.exports = router;
-module.exports = { waitForBookToAppear };
