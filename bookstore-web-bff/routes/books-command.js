@@ -52,7 +52,7 @@ router.post('/', validateBook, async (req, res) => {
                 return res.status(500).json({ message: "Book not available after consistency delay" });
             }
             console.log(`[CMD-ROUTE] [TEST_MODE] Book confirmed in query DB`);
-            return res.status(201).json(confirmed);
+            return res.status(200).json(confirmed);
         }
 
 
