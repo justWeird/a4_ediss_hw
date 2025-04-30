@@ -24,7 +24,7 @@ router.post('/', validateBook, async (req, res) => {
     res.location(`/books/${newBook.ISBN}`);
 
     // Return successful response
-    res.status(201).json(newBook);
+    res.status(200).json(newBook);
   } catch (error) {
     console.error('Error adding book:', error);
     res.status(500).json({ message: "Internal server error" });

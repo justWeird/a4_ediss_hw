@@ -63,7 +63,7 @@ router.post('/', validateBook, async (req, res) => {
 
         // Return successful response
         console.log('[CMD-ROUTE] Returning 201 as created.');
-        res.status(201).json(newBook);
+        res.status(200).json(newBook);
     } catch (error) {
         console.error('[CMD-ROUTE] Error adding book:', error.message);
         if (error.response) {
@@ -111,7 +111,7 @@ router.put('/:ISBN', validateBook, async (req, res) => {
         }
 
         // Return successful response
-        console.log('[CMD-ROUTE] Returning 202 and pinging poll');
+        console.log('[CMD-ROUTE] Returning 200 and pinging poll');
         res.status(200).json(updatedBook);
 
     } catch (error) {
