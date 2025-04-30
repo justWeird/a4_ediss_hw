@@ -62,7 +62,7 @@ router.post('/', validateBook, async (req, res) => {
         res.location(locationUrl);
 
         // Return successful response
-        console.log('[CMD-ROUTE] Returning 201 as created.');
+        console.log('[CMD-ROUTE] Returning 200 as created.');
         res.status(200).json(newBook);
     } catch (error) {
         console.error('[CMD-ROUTE] Error adding book:', error.message);
@@ -95,20 +95,6 @@ router.put('/:ISBN', validateBook, async (req, res) => {
         console.log(`[CMD-ROUTE] Updating book with ISBN ${ISBN}`);
         const updatedBook = await bookService.updateBook(ISBN, book);
         console.log('[CMD-ROUTE] Book updated successfully:', JSON.stringify(updatedBook));
-
-        //initialize wait
-        const TEST_MODE = false;
-        // TEST ONLY: wait until the book is available in Mongo (query-side)
-        if (TEST_MODE) {
-            console.log(`[CMD-ROUTE] [TEST_MODE] Waiting for book to appear in query DB`);
-            const confirmed = await waitForBookToAppear(ISBN);
-            if (!confirmed) {
-                console.warn(`[CMD-ROUTE] [TEST_MODE] Book did not appear after retries`);
-                return res.status(500).json({ message: "Book not available after consistency delay" });
-            }
-            console.log(`[CMD-ROUTE] [TEST_MODE] Book confirmed in query DB`);
-            return res.status(201).json(confirmed);
-        }
 
         // Return successful response
         console.log('[CMD-ROUTE] Returning 200 and pinging poll');
